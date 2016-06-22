@@ -127,6 +127,11 @@ angular.module('angularValidator').directive('angularValidator', ['$injector', '
                         });
                     }
 
+                    // setup async validator using angular's $asyncValidators (need angular v1.3+)
+                    if ('validator-async' in elementToWatch.attributes && typeof scopeForm[elementToWatch.name].$asyncValidators.callback !== 'function') {
+                        scopeForm[elementToWatch.name].$asyncValidators.callback = scope.$eval(elementToWatch.attributes['validator-async'].value)
+                    }
+                    
                     var watch = scope.$watch(function() {
                             return elementToWatch.value + elementToWatch.required + scopeForm.submitted + checkElementValidity(elementToWatch) + getDirtyValue(scopeForm[elementToWatch.name]) + getValidValue(scopeForm[elementToWatch.name]);
                         },
